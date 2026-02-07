@@ -8,25 +8,26 @@ To build this plugin you need to build LLVM. Refer to the [documentation](https:
 
 Here's how you can download, build and install LLVM:
 
-```
+```bash
 git clone --depth 1 --branch llvmorg-14.0.6 https://github.com/llvm/llvm-project.git
-cd llvm-project
-
-mkdir -p build && cd build
-cmake -G "Ninja" -DCMAKE_INSTALL_PREFIX=/opt/llvm ..
-ninja -j$(nproc)
-ninja install
+cmake -S llvm-project/llvm -B llvm-project/build \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DLLVM_ENABLE_PROJECTS="clang;lld" \
+        -DLLVM_ENABLE_RUNTIMES=""
+cmake --build llvm-project/build -j$(nproc)
+sudo cmake --install llvm-project/build --prefix /opt/llvm
 ```
 
 Then, to compile the plugin:
 
-```
-git clone https://github.com/eshard/obfuscator-llvm.git
+```bash
+git clone --depth 1 https://github.com/shadowy-pycoder/obfuscator-llvm.git
 cd obfuscator-llvm
-
 mkdir -p build && cd build
-cmake -G "Ninja" -DLLVM_DIR=/opt/llvm/lib/cmake ..
-ninja -j$(nproc)
+cmake -DLLVM_DIR=/opt/llvm/lib/cmake ..
+make -j$(nproc)
+sudo install -d /opt/obfuscator-llvm/
+sudo install libLLVMObfuscator.so /opt/obfuscator-llvm/
 ```
 
 If the compilation is successful the plugin is `libLLVMObfuscator.so` and can be used with **clang** (`-fpass-plugin=`) or **opt** (`-load-pass-plugin`).
