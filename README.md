@@ -4,9 +4,10 @@ LLVM obfuscation is a LLVM pass plugin, used to apply transformation on [LLVM as
 
 ## Compilation
 
-To build this plugin you need to build LLVM. Refer to the [documentation](https://llvm.org/docs/CMake.html) for more information. 
+To build this plugin you need to build LLVM. Refer to the [documentation](https://llvm.org/docs/CMake.html) for more information.
 
 Here's how you can download, build and install LLVM:
+
 ```
 git clone --depth 1 --branch llvmorg-14.0.6 https://github.com/llvm/llvm-project.git
 cd llvm-project
@@ -40,6 +41,7 @@ you may need to specify `-fno-legacy-pass-manager`.
 `clang -fno-legacy-pass-manager -fpass-plugin=<path/to/llvm/obfuscation>/libLLVMObfuscator.so hello_world.c -o hello_world`
 
 You can chose to insert passes in the optimization pipeline by setting the following environment variables before running clang:
+
 - LLVM_OBF_PEEPHOLE_PASSES
 - LLVM_OBF_SCALAROPTIMIZERLATE_PASSES
 - LLVM_OBF_VECTORIZERSTART_PASSES
@@ -50,8 +52,8 @@ You can chose to insert passes in the optimization pipeline by setting the follo
 For instance if you want to run the flattening, bogus and substitution passes in that order, you can do:
 `export LLVM_OBF_SCALAROPTIMIZERLATE_PASSES="flattening, bogus, substitution, split-basic-blocks"`
 
-Or you can run the string encryption pass with:
-`export LLVM_OBF_OPTIMIZERLASTEP_PASSES="string"`
+You can run the string encryption pass with:
+`export LLVM_OBF_OPTIMIZERLASTEP_PASSES="string-encryption"`
 
 Refer to the llvm::PassBuilder documentation for more information on each insertion point.
 
@@ -87,7 +89,7 @@ The environement variable `LLVM_OBF_DEBUG_SEED` can be set to "y" to enable prin
 
 ## Cross compilation
 
- - [With Android NDK](docs/ANDROID_NDK.md)
+- [With Android NDK](docs/ANDROID_NDK.md)
 
 # Acknowledgement
 
